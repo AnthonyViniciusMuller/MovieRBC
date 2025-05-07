@@ -16,7 +16,7 @@ const WEIGHTS = {
   providedIn: 'root'
 })
 export class MoviesService {
-  readonly movies = httpResource.text("/tmdb_5000_movies.csv", {
+  readonly movies = httpResource.text(`${document.baseURI }tmdb_5000_movies.csv`, {
     parse: this.parse,
     defaultValue: [],
   });
