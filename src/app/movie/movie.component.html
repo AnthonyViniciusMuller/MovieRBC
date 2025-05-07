@@ -1,0 +1,30 @@
+<header>
+  <mat-toolbar color="primary">
+    <span>{{ movie()?.title }}</span>
+  </mat-toolbar>
+</header>
+
+<main>
+  <app-search-movie (chooseMovie)="redirectToMovie($event)" />
+
+  <mat-card class="movie-details">
+    <img mat-card-image src="https://picsum.photos/200/300" alt="Movie Poster" />
+    <mat-card-content>
+      <h2>{{ movie()?.title }}</h2>
+      <p>{{ movie()?.overview }}</p>
+      <a mat-raised-button color="accent" [href]="movie()?.homepage" target="_blank">Watch Now</a>
+    </mat-card-content>
+  </mat-card>
+
+  <h3>Recommended Movies</h3>
+  <section class="recommendations">
+    @for (movie of movies(); track movie.id) {
+      <mat-card>
+        <img mat-card-image [src]="'https://picsum.photos/200/300?'+movie.id" alt="Recommended Poster" />
+        <mat-card-content>
+          <a mat-button [routerLink]="`/${movie.id}`">{{ movie.title }}</a>
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+</main>

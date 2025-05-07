@@ -1,0 +1,57 @@
+.movie-details {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 40px;
+  max-height: 400px;
+
+  img {
+    border-radius: 8px;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  @media (min-width: 720px) {
+    flex-direction: row;
+
+    img {
+      min-width: 40%;
+      border-radius: 8px 0 0 8px;
+    }
+  }
+}
+  
+main {
+  padding: 24px;
+}
+  
+.recommendations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+
+  mat-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    img {
+      height: 80%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    mat-card-content {
+      text-align: center;
+    }
+
+    a {
+      margin-top: 16px;
+    }
+  }
+}
