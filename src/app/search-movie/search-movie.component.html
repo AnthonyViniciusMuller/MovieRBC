@@ -1,0 +1,9 @@
+<mat-form-field class="example-full-width">
+    <mat-label>Search Movie</mat-label>
+    <input type="text" placeholder="Pick one" aria-label="Movie" matInput [(ngModel)]="search" [matAutocomplete]="auto" >
+    <mat-autocomplete  #auto="matAutocomplete" (optionSelected)="chooseMovie.emit($event.option.value)" [displayWith]="displayWith">
+      @for (movie of options(); track movie.id) {
+        <mat-option [value]="movie">{{ movie.title }}</mat-option>
+      }
+    </mat-autocomplete>
+</mat-form-field>
