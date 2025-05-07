@@ -3,20 +3,20 @@ import { Injectable } from '@angular/core';
 import { Movie } from './movies.service.interface';
 
 const WEIGHTS = {
-  genres: 0.15,
+  genres: 0.2,
   language: 0.1,
   runtime: 0.1,
-  popularity: 0.2,
+  popularity: 0.1,
   release_year: 0.1,
   vote_average: 0.2,
-  keywords: 0.15,
+  keywords: 0.2,
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoviesService {
-  readonly movies = httpResource.text(`${document.baseURI }tmdb_5000_movies.csv`, {
+  readonly movies = httpResource.text(`${document.baseURI}tmdb_5000_movies.csv`, {
     parse: this.parse,
     defaultValue: [],
   });
@@ -71,7 +71,7 @@ export class MoviesService {
     });
   }
   
-  calculateSimilarity(a: Movie, b: Movie): number {
+  calculateSimilarity(a: Movie, b: Movie): number { // get every similarity then calc the weighted average
     const genreSim = this.jaccard(a.genres.map(value => value.name), b.genres.map(value => value.name));
     const langSim = a.original_language === b.original_language ? 1 : 0;
     const keywordSim = this.jaccard(a.keywords.map(value => value.name), b.keywords.map(value => value.name));
@@ -93,25 +93,25 @@ export class MoviesService {
     );
   }
   
-  recommend(movie: Movie, topN = 10): Movie[] {
+  recommend(movie: Movie, topN = 20): { movie: Movie, similarity: number }[] {
     return this.movies.value()
-      .map(m => ({ movie: m, similarity: this.calculateSimilarity(movie, m) }))
-      .sort((a, b) => b.similarity - a.similarity)
-      .slice(0, topN)
-      .map(result => result.movie);
+      .filter(m => m.id !== movie.id) // remove the movie being compared
+      .map(m => ({ movie: m, similarity: this.calculateSimilarity(movie, m) })) // calc the similarity of every movie
+      .sort((a, b) => b.similarity - a.similarity) // sort based on similarity
+      .slice(0, topN) // get only the most fit
   }
 
   // calc the similarity of two lists
   private jaccard(a: string[], b: string[]): number {
-    const setA = new Set(a);
+    const setA = new Set(a); // turn into Set for a faster search 
     const setB = new Set(b);
-    const intersection = new Set([...setA].filter(x => setB.has(x)));
-    const union = new Set([...setA, ...setB]);
+    const intersection = new Set([...setA].filter(x => setB.has(x))); // get the elements that appear on both sets
+    const union = new Set([...setA, ...setB]); // create a new set with all the elements
 
-    return intersection.size / union.size;
+    return intersection.size / union.size; // calc similarity
   }
   
   private normalizeDifference(a: number, b: number, maxRange: number): number {
-    return 1 - Math.abs(a - b) / maxRange;
+    return 1 - Math.abs(a - b) / maxRange; // calc similarity within a base number
   }
 }

@@ -18,11 +18,11 @@
 
   <h3>Recommended Movies</h3>
   <section class="recommendations">
-    @for (movie of movies(); track movie.id) {
+    @for (recommended of movies(); track recommended.movie.id) {
       <mat-card>
-        <img mat-card-image [src]="'https://picsum.photos/200/300?'+movie.id" alt="Recommended Poster" />
+        <img mat-card-image [src]="'https://picsum.photos/200/300?'+recommended.movie.id" alt="Recommended Poster" />
         <mat-card-content>
-          <a mat-button [routerLink]="`/${movie.id}`">{{ movie.title }}</a>
+          <a mat-button [routerLink]="`/${recommended.movie.id}`">{{ recommended.movie.title }} | {{ recommended.similarity.toFixed(2) }}</a>
         </mat-card-content>
       </mat-card>
     }
